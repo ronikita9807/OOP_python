@@ -17,7 +17,6 @@ class ExternalWorld:
     clients_at_clerks_info = []
     speed = 50
     restart_flag = 0
-    start_flag = 0
     time_befor_new_client = abs(random.randint(0,10))
     day = 'Понедельник'
     day_num = 0
@@ -253,7 +252,6 @@ class ExternalWorld:
 
 
     def make_clerks(self):
-        self.start_flag = 1
         self.last_day_num = 0 
         self.interface.canvas_up.delete("all")
         self.interface.canvas_down.create_rectangle(50, 50, 500, 350, fill = '#FFDAB9')
@@ -293,27 +291,26 @@ class ExternalWorld:
 
 
     def restart(self):
-        if self.start_flag == 1:
-            self.time = 0
-            self.weeks = 1
-            self.interface.label['text'] = self.format_clock_text()
-            self.clerk = 0
-            self.line = 0
-            self.interface.canvas_up.delete("all")
-            self.interface.canvas_down.delete("all")
-            self.restart_flag = 1
-            self.clients_at_clerks_info = []
-            self.last_hour = 0
-            self.max_len_line = 0
-            self.pos_clients = []
-            self.speed = 50
-            self.time_befor_new_client = abs(random.randint(0,10))
-            self.day = 'Понедельник'
-            self.last_day_num = 0
-            self.hour = 0
-            self.minute = 0
-            self.day_num = 0
+        self.time = 0
+        self.weeks = 1
+        self.interface.label['text'] = self.format_clock_text()
+        self.clerk = 0
+        self.line = 0
+        self.interface.canvas_up.delete("all")
+        self.interface.canvas_down.delete("all")
+        self.restart_flag = 1
+        self.clients_at_clerks_info = []
+        self.last_hour = 0
+        self.max_len_line = 0
+        self.pos_clients = []
+        self.speed = 50
+        self.time_befor_new_client = abs(random.randint(0,10))
+        self.day = 'Понедельник'
+        self.last_day_num = 0
+        self.hour = 0
+        self.minute = 0
+        self.day_num = 0
 
-            self.bank.restart()
+        self.bank.restart()
 
         
