@@ -8,5 +8,5 @@ import externalworld
 import interface
 
 if __name__ == "__main__":
-	external_world_initialization=externalworld.ExternalWorld()
-	external_world_initialization.interface.master.mainloop()
+    external_world_initialization = externalworld.ExternalWorld()
+    external_world_initialization.interface.master.mainloop()
