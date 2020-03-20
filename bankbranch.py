@@ -98,6 +98,18 @@ class BankBranch:
         else:
             return 0
 
+
+    def add_clients(self):
+        self.clients += 1
+        self.clients_in_hour += 1
+        self.clients_week += 1
+
+
+    def lost_clients(self):
+        self.client_lost += 1
+        self.client_lost_week += 1
+
+
     def work_day_clerks_stat(self):
         self.clerks_waiting += len(self.free_clerks)
         self.clerks_waiting_day += len(self.free_clerks)
@@ -109,4 +121,33 @@ class BankBranch:
 
     def revenue_one_client(self):
         return abs(random.randint(50,3000)) 
+
+    def restart(self):
+        self.free_clerks = []
+        self.clerks_salary = 0
+        self.clerks_salary_week = 0
+        self.clerks_waiting = 0 
+        self.clients_waiting = 0
+        self.clerks_waiting_day = 0
+        self.clients_waiting_day = 0
+        self.clients_in_hour = 0
+        self.revenue = 0
+        self.client_lost = 0
+        self.clients = 0
+        self.revenue_week = 0
+        self.client_lost_week = 0
+        self.clients_week = 0 
+        self.stat_day = ''
+        self.stat_week = ''
+        self.clerks_salary = 0
+        self.clerks_salary_week = 0
+        self.clerks_waiting = 0
+        self.clients_waiting = 0
+        self.clients_waiting_week = 0
+        self.clients_waiting_week_step = 0
+        self.clients_waiting_step = 0
+        self.clerks_waiting_day = 0
+        self.clients_waiting_day = 0
+        self.clients_in_hour = 0
+
 

@@ -6,6 +6,7 @@ import forconst
 import bankbranch
 import interface
 
+
 class ExternalWorld:
     time = 0
     clerk = 0
@@ -47,7 +48,7 @@ class ExternalWorld:
         self.interface.botton_restart.grid(row=74, column=13, 
                                         columnspan=22, rowspan=5)
 
-        self.bank=bankbranch.BankBranch(self.pos_clients)
+        #self.bank=bankbranch.BankBranch(self.pos_clients)
         
 
 
@@ -116,15 +117,15 @@ class ExternalWorld:
             #time tracking of clients staying with clerks
             for num in range(len(self.clients_at_clerks_info)):
                 
-                self.clients_at_clerks_info[num-del_num][1] -= 1
+                self.clients_at_clerks_info[num-del_num]['time_before_clerks_free'] -= 1
                 #if the work with the client is over
                 #drawing his departure and freeing the clerk
-                if self.clients_at_clerks_info[num-del_num][1] <= 0:
+                if self.clients_at_clerks_info[num-del_num]['time_before_clerks_free'] <= 0:
                     del_num += 1
-                    self.interface.canvas_up.delete(self.clients_at_clerks_info[num-del_num][2])
-                    self.bank.revenue += self.clients_at_clerks_info[num-del_num][3]
-                    self.bank.revenue_week += self.clients_at_clerks_info[num-del_num][3]
-                    self.bank.free_clerks.append(self.clients_at_clerks_info[num-del_num][0])
+                    self.interface.canvas_up.delete(self.clients_at_clerks_info[num-del_num]['id_client'])
+                    self.bank.revenue += self.clients_at_clerks_info[num-del_num]['revenue']
+                    self.bank.revenue_week += self.clients_at_clerks_info[num-del_num]['revenue']
+                    self.bank.free_clerks.append(self.clients_at_clerks_info[num-del_num]['pos_clerk'])
                     del(self.clients_at_clerks_info[num-del_num])
 
             #summing up the day
@@ -148,13 +149,10 @@ class ExternalWorld:
                 #queue length does not exceed the maximum
                 if self.line < self.max_len_line:
                     self.line += 1
-                    self.bank.clients += 1
-                    self.bank.clients_in_hour += 1
-                    self.bank.clients_week += 1
+                    self.bank.add_clients()
                 #losing customers
                 else:
-                    self.bank.client_lost += 1
-                    self.bank.client_lost_week += 1
+                    self.bank.lost_clients()
 
             #reduce the time before a new client
             else:
@@ -168,13 +166,14 @@ class ExternalWorld:
                     self.line -= 1
                     del(self.bank.free_clerks[0])
 
-                    objects = [pos_free_clerks]
-                    objects.append(self.bank.time_before_free_clerks())
-                    objects.append(self.interface.canvas_up.create_oval(pos_free_clerks-self.lenth_client,
+                    objects = dict()
+                    objects['pos_clerk'] = pos_free_clerks
+                    objects['time_before_clerks_free'] = self.bank.time_before_free_clerks()
+                    objects['id_client'] = self.interface.canvas_up.create_oval(pos_free_clerks-self.lenth_client,
                                                                     55,pos_free_clerks+self.lenth_client,
                                                                     55+self.lenth_client*2, 
-                                                                    fill='green'))
-                    objects.append(self.bank.revenue_one_client())
+                                                                    fill='green')
+                    objects['revenue'] = self.bank.revenue_one_client()
 
                     self.clients_at_clerks_info.append(objects)
 
@@ -253,7 +252,6 @@ class ExternalWorld:
 
 
     def make_clerks(self):
-        self.restart()
         self.last_day_num = 0 
         self.interface.canvas_up.delete("all")
         self.interface.canvas_down.create_rectangle(50, 50, 500, 350, fill = '#FFDAB9')
@@ -288,7 +286,7 @@ class ExternalWorld:
         for i in range(len(self.clients_at_clerks_info)):
             self.bank.client_lost += 1
             self.bank.client_lost_week += 1
-            self.clients_at_clerks_info[i][1] = 0
+            self.clients_at_clerks_info[i]['time_before_clerks_free'] = 0
 
 
 
@@ -313,29 +311,6 @@ class ExternalWorld:
         self.minute = 0
         self.day_num = 0
 
-        self.bank.free_clerks = []
-        self.bank.clerks_salary = 0
-        self.bank.clerks_salary_week = 0
-        self.bank.clerks_waiting = 0 
-        self.bank.clients_waiting = 0
-        self.bank.clerks_waiting_day = 0
-        self.bank.clients_waiting_day = 0
-        self.bank.clients_in_hour = 0
-        self.bank.revenue = 0
-        self.bank.client_lost = 0
-        self.bank.clients = 0
-        self.bank.revenue_week = 0
-        self.bank.client_lost_week = 0
-        self.bank.clients_week = 0 
-        self.bank.stat_day = ''
-        self.bank.stat_week = ''
-        self.bank.clerks_salary = 0
-        self.bank.clerks_salary_week = 0
-        self.bank.clerks_waiting = 0
-        self.bank.clients_waiting = 0
-        self.bank.clients_waiting_week = 0
-        self.bank.clients_waiting_week_step = 0
-        self.bank.clients_waiting_step = 0
-        self.bank.clerks_waiting_day = 0
-        self.bank.clients_waiting_day = 0
-        self.bank.clients_in_hour = 0
+        self.bank.restart()
+
+        

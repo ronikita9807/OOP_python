@@ -83,19 +83,19 @@ class Interface:
         
         self.speed = Scale(self.master, orient = HORIZONTAL,
                             length = 400, font = 'Times',
-                            from_ = 0, to = 100, resolution = 10, 
+                            from_ = 100, to = 0, resolution = 10, 
                             showvalue = False)
         self.speed.grid(row = 18, column = 2, columnspan = 30)
-
-        self.text_max = Label(width = 10, height = 1,
-                            font = 'Times 12', 
-                            text = 'max')
-        self.text_max.grid(row = 19, column = 1, columnspan = 3)
 
         self.text_min = Label(width = 10, height = 1,
                             font = 'Times 12', 
                             text = 'min')
-        self.text_min.grid(row = 19, column = 30, columnspan = 3)
+        self.text_min.grid(row = 19, column = 1, columnspan = 3)
+
+        self.text_max = Label(width = 10, height = 1,
+                            font = 'Times 12', 
+                            text = 'max')
+        self.text_max.grid(row = 19, column = 30, columnspan = 3)
 
         self.l_step = Label(width = 40, height = 1,  
                             text = 'ЧАСТОТА ПРИХОДА КЛИЕНТОВ', 
@@ -105,19 +105,19 @@ class Interface:
         
         self.new_client_time_coef = Scale(self.master,orient = HORIZONTAL,
                             length = 400, font = 'Times',
-                            from_ = 1, to = 10, resolution = 1,
+                            from_ = 10, to = 1, resolution = 1,
                             showvalue = False)
         self.new_client_time_coef.grid(row = 35, column = 2, columnspan = 30)
-
-        self.text_max2 = Label(width = 10, height = 1,
-                            font = 'Times 12', 
-                            text = 'max')
-        self.text_max2.grid(row = 36, column = 1, columnspan = 3)
 
         self.text_min2 = Label(width = 10, height = 1,
                             font = 'Times 12', 
                             text = 'min')
-        self.text_min2.grid(row = 36, column = 30, columnspan = 3)
+        self.text_min2.grid(row = 36, column = 1, columnspan = 3)
+
+        self.text_max2 = Label(width = 10, height = 1,
+                            font = 'Times 12', 
+                            text = 'max')
+        self.text_max2.grid(row = 36, column = 30, columnspan = 3)
 
         self.label = Label(width = 30, height = 7,
                             font = 'Times 15', 
