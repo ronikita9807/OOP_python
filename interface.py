@@ -6,22 +6,20 @@ import forconst
 
 class Interface:
 
-    def __init__(self):
+    def __init__(self, master):
 
         self.const = forconst.ForConst()
-        self.master = Tk()
-        self.master.title("Моделирование обслуживания в филиале банка")
-        self.master.geometry("1920x1200")
+
 
         self.canvas_len = self.const.WIDTH-self.const.WIDTH/4
 
-        self.canvas_up = Canvas(self.master, 
+        self.canvas_up = Canvas(master, 
                                 width = self.const.WIDTH - self.const.WIDTH/4, 
                                 height = self.const.HEIGHT/2, bg="#FFDAB9")
         self.canvas_up.grid(row = 0, column = 41, 
                             rowspan = 40, columnspan = 120)
 
-        self.canvas_down = Canvas(self.master, 
+        self.canvas_down = Canvas(master, 
                                     width = self.const.WIDTH - self.const.WIDTH/4, 
                                     height = self.const.HEIGHT/2, bg = "#FFFACD")
         self.canvas_down.grid(row = 41, column = 41, 
@@ -58,7 +56,7 @@ class Interface:
                             fg = 'black', bd = 1)
         self.l_entry1.grid(row = 76, column = 0, columnspan = 8)
         
-        self.clerk = Scale(self.master,orient = HORIZONTAL ,length = 200,
+        self.clerk = Scale(master,orient = HORIZONTAL ,length = 200,
                             font = 'Times',from_= 2, to = 7,
                             tickinterval = 1, resolution = 1)
         self.clerk.grid(row = 77, column = 0, columnspan = 6)
@@ -69,7 +67,7 @@ class Interface:
                             fg = 'black', bd = 1)
         self.l_entry2.grid(row = 79, column = 0, columnspan = 12)
         
-        self.max_line = Scale(self.master, orient = HORIZONTAL,
+        self.max_line = Scale(master, orient = HORIZONTAL,
                             length = 400, font = 'Times',
                             from_= 10, to = 25, tickinterval = 1,
                             resolution = 1)
@@ -81,7 +79,7 @@ class Interface:
                             fg = 'black', bd = 1)
         self.l_speed.grid(row = 17, column = 2, columnspan = 30)
         
-        self.speed = Scale(self.master, orient = HORIZONTAL,
+        self.speed = Scale(master, orient = HORIZONTAL,
                             length = 400, font = 'Times',
                             from_ = 100, to = 0, resolution = 10, 
                             showvalue = False)
@@ -103,7 +101,7 @@ class Interface:
                             fg = 'black', bd = 1)
         self.l_step.grid(row = 30, column = 1, columnspan = 40)
         
-        self.new_client_time_coef = Scale(self.master,orient = HORIZONTAL,
+        self.new_client_time_coef = Scale(master,orient = HORIZONTAL,
                             length = 400, font = 'Times',
                             from_ = 10, to = 1, resolution = 1,
                             showvalue = False)
@@ -128,7 +126,7 @@ class Interface:
 
         self.id_for_update_stat_day_last = 0
         self.id_for_update_stat_week_last = 0
-        self.id_for_update_line_last = 0
+        self.id_for_update_line_last = 0   
 
 
     def print_stat(self, stat_day, stat_week, line):
