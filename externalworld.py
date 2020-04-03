@@ -28,25 +28,8 @@ class ExternalWorld:
     def __init__(self, master):
 
         self.const = forconst.ForConst()
-        self.interface = interface.Interface(master)
-        self.interface.label['text'] = self.format_time_text()
-        self.interface.botton_start = Button(master, width=12, height=1,
-                                          text="НАЧАТЬ", font='Times',
-                                          state=NORMAL, bg='green', 
-                                          fg='white',
-                                          command=self.make_bank)
-
-        self.interface.botton_start.grid(row=76, column=13,
-                                     columnspan=22, rowspan=5)
-
-        self.interface.botton_restart=Button(master, width=12, height=1,
-                                          text="ПЕРЕЗАПУСК", 
-                                          font='Times 12', bg='red', 
-                                          fg='white', state=NORMAL, 
-                                          command=self.restart)
-
-        self.interface.botton_restart.grid(row=74, column=13, 
-                                        columnspan=22, rowspan=5)
+        self.interface = interface.Interface(master, self)
+        
 
         
 
@@ -84,7 +67,7 @@ class ExternalWorld:
     
 
     def tick(self):
-        self.speed = int( self.interface.speed.get())+2
+        self.speed = self.interface.get_speed()
         #until the end of the week
         if self.time < self.const.LEN_WEEK*self.const.LEN_HOUR*self.const.LEN_MIN and not(self.restart_flag):            
 
@@ -133,33 +116,19 @@ class ExternalWorld:
     def make_bank(self):
         self.start_flag = 1
         self.last_day_num = 0 
-        self.interface.canvas_up.delete("all")
-        self.interface.canvas_down.create_rectangle(50, 50, 500, 350, fill = '#FFDAB9')
-        self.interface.canvas_down.create_rectangle(550, 50, 1050, 350, fill = '#FFDAB9')
-        self.interface.canvas_up.create_rectangle(400, 200, 700, 300, fill = '#FFFACD')
-        self.delete = self.interface.canvas_down.create_text(250, 80, fill = 'black', 
-                                                        text = 'ЗА ДЕНЬ:',
-                                                        font = 'Times 15')
-        self.delete = self.interface.canvas_down.create_text(750, 80, fill = 'black', 
-                                                        text = 'ЗА НЕДЕЛЮ:',
-                                                        font = 'Times 15')
-        clerk = int(self.interface.clerk.get())
+        self.interface.create_canvas()
+        clerk = self.interface.get_clerk()
         lenth_clerk = self.interface.canvas_len/((clerk+1)*4)
         self.lenth_client = lenth_clerk/2
-        position = lenth_clerk
-        self.pos_clients = []
-        for i in range(clerk):
-            position += self.interface.canvas_len/(clerk+1)
-            self.pos_clients.append(position)
-            self.interface.canvas_up.create_rectangle(position-lenth_clerk,
-                                                    0,position+lenth_clerk,
-                                                    50, width=1, fill='red')
-        self.bank = bankbranch.BankBranch(self.pos_clients)
-        self.bank.clerk = clerk
-        self.bank.max_len_line = int(self.interface.max_line.get())
+        
+        self.pos_clients = self.interface.print_clerks(clerk)
+
+        max_len_line = self.interface.get_max_line()
+
+        self.bank = bankbranch.BankBranch(self.pos_clients, clerk, max_len_line)
+
         self.restart_flag = 0
-        self.bank.clients_at_clerks_info = []
-        self.interface.label.after_idle(self.tick)
+        
 
         
 
@@ -169,9 +138,6 @@ class ExternalWorld:
         #if self.start_flag == 1:
             self.time = 0
             self.weeks = 1
-            self.interface.label.configure(text = self.format_time_text())
-            self.interface.canvas_up.delete("all")
-            self.interface.canvas_down.delete("all")
             self.restart_flag = 1
             self.last_hour = 0
             self.pos_clients = []
@@ -184,5 +150,7 @@ class ExternalWorld:
             self.day_num = 0
 
             self.bank.restart()
+
+            self.interface.restart(self)
 
         

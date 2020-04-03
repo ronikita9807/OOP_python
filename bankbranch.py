@@ -29,10 +29,13 @@ class BankBranch:
     clients_at_clerks_info = []
     max_len_line = 0
 
-    def __init__(self, pos_clerks ):
+    def __init__(self, pos_clerks, clerk, max_len_line ):
 
         self.const = forconst.ForConst()
         self.free_clerks = pos_clerks
+        self.clerk=clerk
+        self.max_len_line=max_len_line
+        self.clients_at_clerks_info = []
 
 
     def made_stat(self, clerk ):
@@ -141,7 +144,7 @@ class BankBranch:
             #drawing his departure and freeing the clerk
             if self.clients_at_clerks_info[num-del_num]['time_before_clerks_free'] <= 0:
                 del_num += 1
-                world.interface.canvas_up.delete(self.clients_at_clerks_info[num-del_num]['id_client'])
+                world.interface.delete_clients(self.clients_at_clerks_info[num-del_num]['id_client'])
                 self.revenue += self.clients_at_clerks_info[num-del_num]['revenue']
                 self.revenue_week += self.clients_at_clerks_info[num-del_num]['revenue']
                 self.free_clerks.append(self.clients_at_clerks_info[num-del_num]['pos_clerk'])
@@ -185,10 +188,7 @@ class BankBranch:
                 objects = dict()
                 objects['pos_clerk'] = pos_free_clerks
                 objects['time_before_clerks_free'] = self.time_before_free_clerks()
-                objects['id_client'] = world.interface.canvas_up.create_oval(pos_free_clerks-world.lenth_client,
-                                                                55,pos_free_clerks+world.lenth_client,
-                                                                55+world.lenth_client*2, 
-                                                                fill='green')
+                objects['id_client'] = world.interface.print_one_clients(pos_free_clerks, world.lenth_client)
                 objects['revenue'] = self.revenue_one_client()
 
                 self.clients_at_clerks_info.append(objects)
@@ -201,6 +201,16 @@ class BankBranch:
         self.clients += 1
         self.clients_in_hour += 1
         self.clients_week += 1
+
+
+    def queue_work(self):
+        #queue length does not exceed the maximum
+        if self.line < self.max_len_line:
+            self.line += 1
+            self.add_clients()
+            #losing customers
+        else:
+            self.lost_clients()
 
 
     def lost_clients(self):

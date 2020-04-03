@@ -20,7 +20,7 @@ def main():
     def refresher():
         if world.start_flag == 1:
 
-            world.speed = int( world.interface.speed.get())+2
+            world.speed = world.interface.get_speed()
 
             world.tick()
 
@@ -44,14 +44,8 @@ def main():
                 
                 
                     world.coef = world.what_is_coef_speed_time()
-                    world.time_befor_new_client = abs(random.randint(0,10)) * world.coef * (int( world.interface.new_client_time_coef.get())/3)
-                    #queue length does not exceed the maximum
-                    if world.bank.line < world.bank.max_len_line:
-                        world.bank.line += 1
-                        world.bank.add_clients()
-                    #losing customers
-                    else:
-                        world.bank.lost_clients()
+                    world.time_befor_new_client = abs(random.randint(0,10)) * world.coef * (world.interface.get_new_client_time_coef()/3)
+                    world.bank.queue_work()
 
                 #reduce the time before a new client
                 else:

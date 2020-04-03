@@ -6,7 +6,7 @@ import forconst
 
 class Interface:
 
-    def __init__(self, master):
+    def __init__(self, master, world):
 
         self.const = forconst.ForConst()
 
@@ -126,8 +126,47 @@ class Interface:
 
         self.id_for_update_stat_day_last = 0
         self.id_for_update_stat_week_last = 0
-        self.id_for_update_line_last = 0   
+        self.id_for_update_line_last = 0  
 
+
+
+        self.label['text'] = world.format_time_text()
+        self.botton_start = Button(master, width=12, height=1,
+                                          text="НАЧАТЬ", font='Times',
+                                          state=NORMAL, bg='green', 
+                                          fg='white',
+                                          command=world.make_bank)
+
+        self.botton_start.grid(row=76, column=13,
+                                     columnspan=22, rowspan=5)
+
+        self.botton_restart=Button(master, width=12, height=1,
+                                          text="ПЕРЕЗАПУСК", 
+                                          font='Times 12', bg='red', 
+                                          fg='white', state=NORMAL, 
+                                          command=world.restart)
+
+        self.botton_restart.grid(row=74, column=13, 
+                                        columnspan=22, rowspan=5)
+
+
+    def create_canvas(self):
+        self.canvas_up.delete("all")
+        self.canvas_down.create_rectangle(50, 50, 500, 350, fill = '#FFDAB9')
+        self.canvas_down.create_rectangle(550, 50, 1050, 350, fill = '#FFDAB9')
+        self.canvas_up.create_rectangle(400, 200, 700, 300, fill = '#FFFACD')
+        self.text_day = self.canvas_down.create_text(250, 80, fill = 'black', 
+                                                        text = 'ЗА ДЕНЬ:',
+                                                        font = 'Times 15')
+        self.text_week = self.canvas_down.create_text(750, 80, fill = 'black', 
+                                                        text = 'ЗА НЕДЕЛЮ:',
+                                                        font = 'Times 15')
+    def get_clerk(self):
+        return int(self.clerk.get())
+
+
+    def get_max_line(self):
+        return int(self.max_line.get())
 
     def print_stat(self, stat_day, stat_week, line):
         self.id_for_update_stat_day = self.canvas_down.create_text(270, 190, fill = 'black', 
@@ -158,3 +197,36 @@ class Interface:
                                                                             font = 'Times 13')
         self.canvas_down.delete(self.id_for_update_stat_week_last)
         self.id_for_update_stat_week_last = self.id_for_update_stat_week
+
+    def print_clerks(self, clerk):
+        pos_clients=[]
+        lenth_clerk = self.canvas_len/((clerk+1)*4)
+        position = lenth_clerk
+        for i in range(clerk):
+            position += self.canvas_len/(clerk+1)
+            pos_clients.append(position)
+            self.canvas_up.create_rectangle(position-lenth_clerk,
+                                                    0,position+lenth_clerk,
+                                                    50, width=1, fill='red')
+        return pos_clients
+
+    def delete_clients(self, id_clients):
+        self.canvas_up.delete(id_clients)
+
+
+
+    def restart(self, world):
+        self.label.configure(text = world.format_time_text())
+        self.canvas_up.delete("all")
+        self.canvas_down.delete("all")
+
+    def print_one_clients(self,pos,lenth,):
+        return self.canvas_up.create_oval(pos - lenth,
+                                            55,pos+lenth,
+                                            55+lenth*2, 
+                                            fill='green')
+    def get_speed(self):
+        return int( self.speed.get())+2
+
+    def get_new_client_time_coef(self):
+        return int( self.new_client_time_coef.get())
